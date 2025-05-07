@@ -16,54 +16,40 @@ const Contact = () => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    emailjs
-      .send(
-        import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
+    try {
+     await emailjs.send(
+        'service_bqogq3z',
+        'template_wnyiiyv',
         {
+          // Make sure these parameter names match exactly what your template expects
+          to: form.email,
+          to_email: form.email,
+          recipient: form.email,
+          email: form.email,
+          user_email: form.email,
+
+          // Keep your other parameters
           from_name: form.name,
-          to_name: 'JavaScript Mastery',
-          from_email: form.email,
-          to_email: 'sujata@jsmastery.pro',
+          to_name: 'Tejasa',
+          reply_to: form.email,
           message: form.message,
         },
-        import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY,
-      )
-      .then(
-        () => {
-          setLoading(false);
-          showAlert({
-            show: true,
-            text: 'Thank you for your message 😃',
-            type: 'success',
-          });
-
-          setTimeout(() => {
-            hideAlert(false);
-            setForm({
-              name: '',
-              email: '',
-              message: '',
-            });
-          }, [3000]);
-        },
-        (error) => {
-          setLoading(false);
-          console.error(error);
-
-          showAlert({
-            show: true,
-            text: "I didn't receive your message 😢",
-            type: 'danger',
-          });
-        },
+        'wlFjAG7vFwMZESrxy'
       );
-  };
 
+      setLoading(false);
+      // alert('Your message has been sent');
+
+    } catch(error) {
+      setLoading(false);
+      console.log(error);
+      // alert('Something went wrong!');
+    }
+  };
   return (
     <section className="c-space my-20" id="contact">
       {alert.show && <Alert {...alert} />}
@@ -114,7 +100,7 @@ const Contact = () => {
                 required
                 rows={5}
                 className="field-input"
-                placeholder="Share your thoughts or inquiries..."
+                placeholder="Share your thoughts..."
               />
             </label>
 
